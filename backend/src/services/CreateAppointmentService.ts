@@ -4,7 +4,7 @@ import Appointment from '../models/Appointment';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
 interface Request {
-  provider: string;
+  providerId: string;
   date: Date;
 }
 
@@ -20,10 +20,10 @@ class CreateAppointmentService {
       appointmentDate
     );
     if (findAppointmentInSameDate) {
-      throw Error('This appointment is already booked');
+      throw new Error('This appointment is already booked');
     }
     const appointment = this.repository.create({
-      provider: request.provider,
+      providerId: request.providerId,
       date: appointmentDate,
     });
     await this.repository.save(appointment);
