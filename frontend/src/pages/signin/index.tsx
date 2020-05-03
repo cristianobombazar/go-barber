@@ -8,7 +8,7 @@ import logo from '../../assets/logo.svg';
 import Input from '../../components/input';
 import Button from '../../components/button';
 import getValidationErrors from '../../utils/getValidationErrors';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 interface CredentialsForm {
   email: string;
@@ -17,7 +17,7 @@ interface CredentialsForm {
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const { signIn, user } = useContext(AuthContext);
+  const { signIn, user } = useAuth();
 
   const handleRegistration = useCallback(
     async (data: CredentialsForm) => {
