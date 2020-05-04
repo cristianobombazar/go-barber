@@ -42,11 +42,15 @@ const SignIn: React.FC = () => {
         if (err instanceof Yup.ValidationError) {
           formRef.current?.setErrors(getValidationErrors(err));
         } else {
-          addToast();
+          addToast({
+            type: 'error',
+            title: 'Error while authenticate',
+            description: 'Check your username/password',
+          });
         }
       }
     },
-    [signIn, addToast()],
+    [signIn, addToast],
   );
 
   return (
