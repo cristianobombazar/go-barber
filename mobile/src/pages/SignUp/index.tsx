@@ -37,36 +37,39 @@ const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
 
-  const handleRegistration = useCallback(async (data: SignUpFormData) => {
-    formRef.current?.setErrors({});
-    try {
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string()
-          .required('E-mail is required')
-          .email('Provide a valid e-mail'),
-        password: Yup.string().required('Password is required'),
-      });
-      await schema.validate(data, {
-        abortEarly: false,
-      });
-      await api.post('/users', data);
-      Alert.alert(
-        'Your account has been created',
-        'You can do your login using the GoBarber',
-      );
-      navigation.navigate('SignIn');
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        formRef.current?.setErrors(getValidationErrors(err));
-      } else {
+  const handleRegistration = useCallback(
+    async (data: SignUpFormData) => {
+      formRef.current?.setErrors({});
+      try {
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Name is required'),
+          email: Yup.string()
+            .required('E-mail is required')
+            .email('Provide a valid e-mail'),
+          password: Yup.string().required('Password is required'),
+        });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+        await api.post('/users', data);
         Alert.alert(
-          'Error while registration your account',
-          'An error occurred while registering your account',
+          'Your account has been created',
+          'You can do your login using the GoBarber',
         );
+        navigation.navigate('SignIn');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          formRef.current?.setErrors(getValidationErrors(err));
+        } else {
+          Alert.alert(
+            'Error while registration your account',
+            'An error occurred while registering your account',
+          );
+        }
       }
-    }
-  }, []);
+    },
+    [navigation],
+  );
 
   return (
     <>

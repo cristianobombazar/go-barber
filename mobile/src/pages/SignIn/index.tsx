@@ -17,6 +17,7 @@ import logoImg from '../../assets/logo.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErrors';
+import { useAuth } from '../../hooks/auth';
 import {
   Container,
   Title,
@@ -35,32 +36,35 @@ const SignIn: React.FC = () => {
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
   const inputRefPassword = useRef<TextInput>(null);
+  const { signIn } = useAuth();
 
-  const handleRegistration = useCallback(async (data: CredentialsForm) => {
-    formRef.current?.setErrors({});
-    try {
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail is required')
-          .email('Provide a valid e-mail'),
-        password: Yup.string().min(6, 'Password mut be longer than 6 digits'),
-      });
-      await schema.validate(data, {
-        abortEarly: false,
-      });
-      /* await signIn({
+  const handleRegistration = useCallback(
+    async (data: CredentialsForm) => {
+      formRef.current?.setErrors({});
+      try {
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail is required')
+            .email('Provide a valid e-mail'),
+          password: Yup.string().min(6, 'Password mut be longer than 6 digits'),
+        });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+        await signIn({
           email: data.email,
           password: data.password,
         });
-        history.push('/dashboard'); */
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        formRef.current?.setErrors(getValidationErrors(err));
-      } else {
-        Alert.alert('Error while authenticate', 'Error while authenticate');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          formRef.current?.setErrors(getValidationErrors(err));
+        } else {
+          Alert.alert('Error while authenticate', 'Error while authenticate');
+        }
       }
-    }
-  }, []);
+    },
+    [signIn],
+  );
 
   return (
     <>
