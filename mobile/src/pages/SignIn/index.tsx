@@ -6,14 +6,17 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
 import logoImg from '../../assets/logo.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import getValidationErrors from '../../utils/getValidationErrors';
 import {
   Container,
   Title,
@@ -23,13 +26,40 @@ import {
   CreateAccountButtonText,
 } from './styles';
 
+interface CredentialsForm {
+  email: string;
+  password: string;
+}
+
 const SignIn: React.FC = () => {
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
   const inputRefPassword = useRef<TextInput>(null);
 
-  const handleSignIn = useCallback((data: object) => {
-    console.log(data);
+  const handleRegistration = useCallback(async (data: CredentialsForm) => {
+    formRef.current?.setErrors({});
+    try {
+      const schema = Yup.object().shape({
+        email: Yup.string()
+          .required('E-mail is required')
+          .email('Provide a valid e-mail'),
+        password: Yup.string().min(6, 'Password mut be longer than 6 digits'),
+      });
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+      /* await signIn({
+          email: data.email,
+          password: data.password,
+        });
+        history.push('/dashboard'); */
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        formRef.current?.setErrors(getValidationErrors(err));
+      } else {
+        Alert.alert('Error while authenticate', 'Error while authenticate');
+      }
+    }
   }, []);
 
   return (
@@ -50,7 +80,7 @@ const SignIn: React.FC = () => {
             <View>
               <Title>Do your logon</Title>
             </View>
-            <Form onSubmit={handleSignIn} ref={formRef}>
+            <Form onSubmit={handleRegistration} ref={formRef}>
               <Input
                 name="email"
                 icon="mail"
