@@ -4,7 +4,8 @@ import crypt from 'crypto';
 
 const tempFolder = path.resolve(__dirname, '..', '..', 'tmp');
 export default {
-  directory: tempFolder,
+  tempFolder,
+  uploadFolder: path.resolve(tempFolder, 'uploads'),
   storage: multer.diskStorage({
     // '..' means skip to folders
     destination: tempFolder,
