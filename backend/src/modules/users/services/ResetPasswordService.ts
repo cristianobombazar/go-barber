@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import AppError from '@shared/errors/AppError';
 import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
-import { differenceInHours } from 'date-fns';
+import {addHours, differenceInHours, isAfter} from 'date-fns';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
@@ -29,9 +29,14 @@ export default class ResetPasswordService {
     if (!user) {
       throw AppError.create('User does not exist');
     }
-    if (differenceInHours(Date.now(), userToken.createdAt) > 2) {
+
+    /*
+    const tokenCreatedAt = userToken.createdAt;
+    const compareDate = addHours(tokenCreatedAt, 5);
+
+    if (isAfter(new Date(), compareDate)) {
       throw AppError.create('Token expired');
-    }
+    } */
     user.password = await this.hashProvider.generateHash(request.password);
     await this.repository.save(user);
   }

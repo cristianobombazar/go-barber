@@ -25,7 +25,10 @@ export default class SendForgotPasswordEmailService {
       throw AppError.create(`User does not exists.`);
     }
 
-    const token = await this.tokensRepository.generate(user.id);
-    this.mailProvider.sendMail(email, 'This is a test');
+    const { token } = await this.tokensRepository.generate(user.id);
+    await this.mailProvider.sendMail(
+      email,
+      `Reset password request received: ${token}`
+    );
   }
 }

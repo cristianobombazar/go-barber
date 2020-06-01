@@ -24,9 +24,6 @@ class UserToken {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
-
-  @Column()
-  avatar: string;
 }
 
 export default UserToken;
