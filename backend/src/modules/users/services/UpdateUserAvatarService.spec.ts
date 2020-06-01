@@ -34,7 +34,7 @@ describe('UpdateUserAvatar', () => {
       fakeStorageProvider
     );
 
-    expect(
+    await expect(
       service.execute({
         userId: 'non-existing-user',
         avatarFileName: 'avatar.jpg',
@@ -69,6 +69,6 @@ describe('UpdateUserAvatar', () => {
     });
 
     expect(deleteFileFunction).toHaveBeenCalledWith('avatar.jpg');
-    expect(user.avatar).toBe('avatar.jpg');
+    expect(user.avatar).toBe('avatar2.jpg');
   });
 });

@@ -1,7 +1,7 @@
-import { startOfHour } from 'date-fns';
+import {startOfHour} from 'date-fns';
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import AppError from '@shared/errors/AppError';
-import { inject, injectable } from 'tsyringe';
+import {inject, injectable} from 'tsyringe';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
@@ -25,11 +25,10 @@ class CreateAppointmentService {
     if (findAppointmentInSameDate) {
       throw AppError.create('This appointment is already booked');
     }
-    const appointment = await this.repository.create({
+    return await this.repository.create({
       providerId: request.providerId,
       date: appointmentDate,
     });
-    return appointment;
   }
 }
 
