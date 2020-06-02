@@ -1,5 +1,6 @@
 import 'reflect-metadata'; // TODO remove after creating the provider for ITokenProvider.
 import { injectable, inject } from 'tsyringe';
+import path from 'path';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import AppError from '@shared/errors/AppError';
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
@@ -33,10 +34,11 @@ export default class SendForgotPasswordEmailService {
       },
       subject: '[GoBarber] Recovery your password',
       template: {
-        template: 'Olá, {{name}} : {{token}}',
+        file: path.resolve(__dirname, '..', 'views', 'forgot_password.hbs'),
         variables: {
           name: user.name,
           token,
+          link: `http://localhost:3000/reset_password?token=${token}`,
         },
       },
     });
