@@ -62,6 +62,7 @@ describe('ResetPasswordService', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
+  // TODO uncomment this test
   /*
   it('Should not be able to reset the password after two hours', async () => {
     const user = await repository.create({
