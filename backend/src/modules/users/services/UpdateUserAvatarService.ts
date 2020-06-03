@@ -9,7 +9,7 @@ interface IRequest {
   avatarFileName: string;
 }
 @injectable()
-class UpdateUserAvatarServvice {
+class UpdateUserAvatarService {
   constructor(
     @inject('UsersRepository') private repository: IUsersRepository,
     @inject('UsersRepoStorageProvidersitory')
@@ -35,4 +35,4 @@ class UpdateUserAvatarServvice {
   }
 }
 
-export default UpdateUserAvatarServvice;
+export default UpdateUserAvatarService;

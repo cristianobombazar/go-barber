@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 
-interface TokenPayload {
+interface ITokenPayload {
   iat: number;
   exp: number;
   sub: string;
@@ -19,7 +19,7 @@ export default function ensureAuthenticated(
     throw AppError.create('JWT token is missing', 401);
   }
   const [, token] = authToken.split(' ');
-  const payload = verify(token, authConfig.jwt.secret) as TokenPayload;
+  const payload = verify(token, authConfig.jwt.secret) as ITokenPayload;
 
   request.user = {
     id: payload.sub,
