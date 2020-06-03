@@ -30,7 +30,7 @@ describe('UpdateProfile', () => {
     expect(updatedUser.email).toBe('johntrê@example.com');
   });
 
-  it('Should be able to change the email for a email taken', async () => {
+  it('Should not be able to change the email for a email taken', async () => {
     await repository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -69,7 +69,7 @@ describe('UpdateProfile', () => {
     expect(updatedUser.password).toBe('123123');
   });
 
-  it('Should be able to update the password without the old password', async () => {
+  it('Should not be able to update the password without the old password', async () => {
     const user = await repository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -85,7 +85,7 @@ describe('UpdateProfile', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('Should be able to update the password without wrong old password', async () => {
+  it('Should not be able to update the password without wrong old password', async () => {
     const user = await repository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -101,4 +101,16 @@ describe('UpdateProfile', () => {
       })
     ).rejects.toBeInstanceOf(AppError);
   });
+
+  it('Should not be able to update a profile from a non existing user', async () => {
+    await expect(
+      service.execute({
+        userId: 'non-existing user',
+        name: 'Test',
+        email: 'test',
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+
 });
