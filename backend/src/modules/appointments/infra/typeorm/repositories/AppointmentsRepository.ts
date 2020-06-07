@@ -37,7 +37,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
         providerId: criteria.providerId,
         date: Raw(
           dateFieldName =>
-            `to_char(${dateFieldName}, 'MM-YYYY') = ${parsedMonth}-${criteria.year}`
+            `to_char(${dateFieldName}, 'MM-YYYY') = '${parsedMonth}-${criteria.year}'`
         ),
       },
     });
