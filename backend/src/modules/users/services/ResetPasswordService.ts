@@ -30,13 +30,12 @@ export default class ResetPasswordService {
       throw AppError.create('User does not exist');
     }
 
-    /*
     const tokenCreatedAt = userToken.createdAt;
-    const compareDate = addHours(tokenCreatedAt, 5);
+    const compareDate = addHours(tokenCreatedAt, 2);
 
-    if (isAfter(new Date(), compareDate)) {
+    if (isAfter(Date.now(), compareDate)) {
       throw AppError.create('Token expired');
-    } */
+    }
     user.password = await this.hashProvider.generateHash(request.password);
     await this.repository.save(user);
   }

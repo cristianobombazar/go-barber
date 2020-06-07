@@ -63,7 +63,7 @@ describe('ResetPasswordService', () => {
   });
 
   // TODO uncomment this test
-  /*
+
   it('Should not be able to reset the password after two hours', async () => {
     const user = await repository.create({
       email: 'johndoe@example.com.br',
@@ -85,5 +85,4 @@ describe('ResetPasswordService', () => {
       })
     ).rejects.toBeInstanceOf(AppError);
   });
-  */
 });
