@@ -2,6 +2,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICreateUserDTO from '@modules/users/dto/ICreateUserDTO';
 import User from '@modules/users/infra/typeorm/entities/User';
 import { uuid } from 'uuidv4';
+import IFindAllProvidersDTO from '@modules/users/dto/IFindAllProvidersDTO';
 
 class FakeUsersRepository implements IUsersRepository {
   users: User[] = [];
@@ -28,6 +29,15 @@ class FakeUsersRepository implements IUsersRepository {
     user.password = dto.password;
     this.users.push(user);
     return user;
+  }
+
+  public async findAllProviders(
+    criteria: IFindAllProvidersDTO
+  ): Promise<User[]> {
+    if (criteria && criteria.exceptUserId) {
+      return this.users.filter(item => item.id !== criteria.exceptUserId);
+    }
+    return this.users;
   }
 }
 

@@ -12,7 +12,7 @@ interface IRequest {
 class UpdateUserAvatarService {
   constructor(
     @inject('UsersRepository') private repository: IUsersRepository,
-    @inject('UsersRepoStorageProvidersitory')
+    @inject('StorageProvider')
     private storageProvider: IStorageProvider
   ) {}
 
