@@ -3,6 +3,7 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 import ICreateAppointmentDTO from '@modules/appointments/dto/ICreateAppointmentDTO';
 import Appointment from '../entities/Appointment';
 import IFindAllInMonthFromProviderDTO from '@modules/appointments/dto/IFindAllInMonthFromProviderDTO';
+import IFindAllInDayFromProviderDTO from '@modules/appointments/dto/IFindAllInDayFromProviderDTO';
 
 class AppointmentsRepository implements IAppointmentsRepository {
   private repository: Repository<Appointment>;
@@ -37,6 +38,23 @@ class AppointmentsRepository implements IAppointmentsRepository {
         date: Raw(
           dateFieldName =>
             `to_char(${dateFieldName}, 'MM-YYYY') = ${parsedMonth}-${criteria.year}`
+        ),
+      },
+    });
+    return findAppointment;
+  }
+
+  public async findByAllInDayFromProvider(
+    criteria: IFindAllInDayFromProviderDTO
+  ): Promise<Appointment[]> {
+    const parsedMonth = String(criteria.month).padStart(2, '0');
+    const parsedDay = String(criteria.day).padStart(2, '0');
+    const findAppointment = await this.repository.find({
+      where: {
+        providerId: criteria.providerId,
+        date: Raw(
+          dateFieldName =>
+            `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${criteria.year}'`
         ),
       },
     });
