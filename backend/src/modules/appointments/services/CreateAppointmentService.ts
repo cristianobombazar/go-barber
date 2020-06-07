@@ -6,6 +6,7 @@ import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
   providerId: string;
+  userId: string;
   date: Date;
 }
 
@@ -25,10 +26,12 @@ class CreateAppointmentService {
     if (findAppointmentInSameDate) {
       throw AppError.create('This appointment is already booked');
     }
-    return await this.repository.create({
+    const appointment = await this.repository.create({
       providerId: request.providerId,
       date: appointmentDate,
+      userId: request.userId,
     });
+    return appointment;
   }
 }
 

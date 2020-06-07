@@ -20,6 +20,7 @@ class FakeAppointmentsRepository implements IAppointmentsRepository {
     appointment.id = uuid();
     appointment.date = dto.date;
     appointment.providerId = dto.providerId;
+    appointment.userId = dto.userId;
     this.appointments.push(appointment);
     return appointment;
   }
