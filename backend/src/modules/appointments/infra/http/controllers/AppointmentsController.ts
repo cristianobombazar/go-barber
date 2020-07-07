@@ -5,9 +5,15 @@ import { parseISO } from 'date-fns';
 
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const createAppointmentService = container.resolve(
-      CreateAppointmentService
-    );
+    console.log('here 1');
+    let createAppointmentService;
+    try {
+      createAppointmentService = container.resolve(CreateAppointmentService);
+    } catch (e) {
+      console.log(e);
+    }
+
+    console.log('here 2');
     const userId = request.user.id;
     const { providerId, date } = request.body;
 

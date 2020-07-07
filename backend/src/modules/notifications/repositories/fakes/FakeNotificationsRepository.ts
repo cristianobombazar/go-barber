@@ -4,7 +4,6 @@ import { ObjectID } from 'mongodb';
 import Notification from '../../infras/typeorm/schemas/Notification';
 
 class FakeNotificationsRepository implements INotificationRepository {
-  // eslint-disable-next-line prettier/prettier
   private notifications: Notification[] = [];
 
   public async create({
