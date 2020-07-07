@@ -85,3 +85,6 @@ fabric.properties
 
 /coverage/
 coverage
+.env
+
+#ormconfig.json
