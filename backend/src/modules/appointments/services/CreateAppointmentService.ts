@@ -47,11 +47,10 @@ class CreateAppointmentService {
     });
 
     const dateFormatted = format(appointment.date, "dd/MM/yyyy 'at' HH:mm'h'");
-    /*
     await this.notificationRepository.create({
       recipientId: request.providerId,
       content: `New appointment on ${dateFormatted}`,
-    }); */
+    });
     return appointment;
   }
 }
