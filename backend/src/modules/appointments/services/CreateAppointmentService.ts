@@ -2,7 +2,7 @@ import { format, getHours, isBefore, startOfHour } from 'date-fns';
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
-import INotificationRepository from '@modules/notifications/repositories/INotificationRepository';
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
@@ -14,10 +14,10 @@ interface IRequest {
 @injectable()
 class CreateAppointmentService {
   constructor(
-    @inject('NotificationRepository')
-    private notificationRepository: INotificationRepository,
     @inject('AppointmentsRepository')
-    private repository: IAppointmentsRepository
+    private repository: IAppointmentsRepository,
+    @inject('NotificationsRepository')
+    private notificationRepository: INotificationsRepository
   ) {}
 
   public async execute(request: IRequest): Promise<Appointment> {
