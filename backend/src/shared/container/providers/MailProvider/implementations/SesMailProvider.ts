@@ -1,37 +1,34 @@
 import { inject, injectable } from 'tsyringe';
-import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import nodemailer, { Transporter } from 'nodemailer';
+import aws from 'aws-sdk';
+import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import ISendMailDTO from '@shared/container/providers/MailProvider/dtos/ISendMailDTO';
 import IMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/models/IMailTemplateProvider';
+import mail from '@config/mail';
 
 @injectable()
-export default class EtherealMailProvider implements IMailProvider {
-
+export default class SesMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor(
     @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider
   ) {
-    nodemailer.createTestAccount().then(account => {
-      this.client = nodemailer.createTransport({
-        host: account.smtp.host,
-        port: account.smtp.port,
-        secure: account.smtp.secure,
-        auth: {
-          user: account.user,
-          pass: account.pass,
-        },
-      });
+    this.client = nodemailer.createTransport({
+      SES: new aws.SES({
+        apiVersion: '2010-12-01',
+        region: process.env.AWS_DEFAULT_REGION,
+      }),
     });
   }
 
   public async sendMail(data: ISendMailDTO): Promise<void> {
     const { to, from, subject } = data;
-    const message = await this.client.sendMail({
+    const { name, email } = mail.defaults.from;
+    await this.client.sendMail({
       from: {
-        name: from?.name || 'GoBarber Team',
-        address: from?.email || 'cristiaano.bombazar@gmail.com',
+        name: from?.name || name,
+        address: from?.email || email,
       },
       to: {
         name: to.name,
@@ -40,7 +37,5 @@ export default class EtherealMailProvider implements IMailProvider {
       subject,
       html: await this.mailTemplateProvider.parse(data.template),
     });
-    console.log('Message sent: %s', message.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
   }
 }
