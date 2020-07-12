@@ -37,6 +37,8 @@ class AuthenticateUserService {
       throw AppError.create('Incorret email/password combination', 401);
     }
     const { secret, expiresIn } = authConfig.jwt;
+    console.log(authConfig.jwt);
+    console.log(secret, expiresIn);
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     const token = sign({}, secret, {

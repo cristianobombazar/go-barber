@@ -8,14 +8,10 @@ let fakeStorageProvider: FakeStorageProvider;
 let service: UpdateUserAvatarService;
 
 describe('UpdateUserAvatar', () => {
-
-  beforeEach(() =>{
+  beforeEach(() => {
     repository = new FakeUsersRepository();
     fakeStorageProvider = new FakeStorageProvider();
-    service = new UpdateUserAvatarService(
-      repository,
-      fakeStorageProvider
-    );
+    service = new UpdateUserAvatarService(repository, fakeStorageProvider);
   });
 
   it('Should be able to update users avatar', async () => {
