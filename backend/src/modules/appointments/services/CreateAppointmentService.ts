@@ -4,6 +4,7 @@ import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
 interface IRequest {
   providerId: string;
@@ -17,7 +18,9 @@ class CreateAppointmentService {
     @inject('AppointmentsRepository')
     private repository: IAppointmentsRepository,
     @inject('NotificationsRepository')
-    private notificationRepository: INotificationsRepository
+    private notificationRepository: INotificationsRepository,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   public async execute(request: IRequest): Promise<Appointment> {
@@ -47,10 +50,18 @@ class CreateAppointmentService {
     });
 
     const dateFormatted = format(appointment.date, "dd/MM/yyyy 'at' HH:mm'h'");
+
+    const cacheKey = `provider-appointments:${request.providerId}:${format(
+      appointmentDate,
+      'yyyy-M-d'
+    )}`;
+    await this.cacheProvider.invalidate(cacheKey);
+
     await this.notificationRepository.create({
       recipientId: request.providerId,
       content: `New appointment on ${dateFormatted}`,
     });
+
     return appointment;
   }
 }
