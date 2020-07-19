@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FiPower, FiClock } from 'react-icons/fi';
+import DayPicker, { DayModifiers } from 'react-day-picker';
 import {
   Container,
   Header,
@@ -14,10 +15,21 @@ import {
 } from './styles';
 import logoImg from '../../assets/logo.svg';
 import { useAuth } from '../../hooks/auth';
+import 'react-day-picker/lib/style.css';
+
 
 const Dashboard: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { signOut, user } = useAuth();
+
+  const handleDateChanged = useCallback(
+    (dateSelected: Date, modifiers: DayModifiers) => {
+      if (modifiers.available) {
+        setSelectedDate(dateSelected);
+      }
+    },
+    [],
+  );
 
   return (
     <Container>
@@ -107,7 +119,18 @@ const Dashboard: React.FC = () => {
             </Appointment>
           </Section>
         </Schedule>
-        <Calendar />
+        <Calendar>
+          <DayPicker
+            fromMonth={new Date()}
+            disabledDays={[{ daysOfWeek: [0, 6] }]}
+            selectedDays={selectedDate}
+            modifiers={{
+              available: { daysOfWeek: [1, 2, 3, 4, 5, 6] },
+            }}
+            onDayClick={handleDateChanged}
+            weekdaysShort={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
+          />
+        </Calendar>
       </Content>
     </Container>
   );
