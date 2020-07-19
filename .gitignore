@@ -1,4 +1,8 @@
 backend/node_modules
 backend/.vscode
+backend/.idea
 backend/tmp/*
+frontend/.vscode
+frontend/.idea/frontend.iml
+frontend/node_modules
 !backend/tmp/.gitkeep
