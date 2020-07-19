@@ -1,10 +1,59 @@
-import React from 'react';
+import styled from 'styled-components';
 
-const Dashboard: React.FC = () => (
-  <Container>
-    
-  </Container>
-)
-};
+export const Container = styled.div``;
 
-export default Dashboard;
+export const Header = styled.header`
+  padding: 32px 0;
+  background: #28262e;
+`;
+
+export const HeaderContent = styled.div`
+  max-width: 1220px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+
+  /* > MEANS FIRST IMG OF THE HEADER CONTENT */
+  > img {
+    height: 80px;
+  }
+
+  button {
+    margin-left: auto;
+    background: transparent;
+    border: 0;
+
+    svg {
+      color: #999591;
+      width: 20px;
+      height: 20px;
+    }
+  }
+`;
+
+export const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 80px;
+
+  img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
+    line-height: 24px;
+  }
+
+  span {
+    color: #f4ede8;
+  }
+
+  strong {
+    color: #ff9000;
+  }
+`;
