@@ -5,6 +5,7 @@ interface User {
   id: string;
   avatarUrl: string;
   name: string;
+  email: string;
 }
 
 interface Credentials {

@@ -14,10 +14,11 @@ import Tooltip from '../Tooltip';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
+  containerStyle?: object;
   icon?: React.ComponentType<IconBaseProps>;
 }
 
-const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
+const Input: React.FC<InputProps> = ({ name, icon: Icon, containerStyle, ...rest }) => {
   const [isFocused, setFocused] = useState(false);
   const [isFilled, setFilled] = useState(false);
   const [isError, setError] = useState(false);
@@ -42,7 +43,12 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   }, []);
 
   return (
-    <Container isFilled={isFilled} isFocused={isFocused} isError={!!error}>
+    <Container
+      isFilled={isFilled}
+      isFocused={isFocused}
+      isError={!!error}
+      style={containerStyle}
+    >
       {Icon && <Icon size={20} />}
       <input
         defaultValue={defaultValue}
