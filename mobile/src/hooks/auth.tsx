@@ -14,8 +14,15 @@ interface Credentials {
   password: string;
 }
 
+interface User {
+  id: string;
+  avatarUrl: string;
+  name: string;
+  email: string;
+}
+
 interface AuthContextData {
-  user: object;
+  user: User;
   signIn(credentials: Credentials): Promise<void>;
   signOut(): void;
   isLoading: boolean;
@@ -23,14 +30,14 @@ interface AuthContextData {
 
 interface AuthState {
   token: string;
-  user: object;
+  user: User;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>({} as AuthState);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     async function loadStorageData(): Promise<void> {
