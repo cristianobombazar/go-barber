@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import ListProviderService from '@modules/appointments/services/ListProviderService';
+import { classToClass } from 'class-transformer';
 
 export default class ProvidersController {
   public async findAll(
@@ -13,10 +14,6 @@ export default class ProvidersController {
     const providers = await service.execute({
       userId,
     });
-    providers.forEach(value => {
-      // eslint-disable-next-line no-param-reassign
-      delete value.password;
-    });
-    return response.json(providers);
+    return response.json(classToClass(providers));
   }
 }
