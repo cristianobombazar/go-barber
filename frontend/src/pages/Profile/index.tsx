@@ -16,6 +16,8 @@ interface ProfileFormData {
   name: string;
   email: string;
   password: string;
+  oldPassword: string;
+  passwordConfirmation: string;
 }
 
 const Profile: React.FC = () => {
@@ -33,27 +35,59 @@ const Profile: React.FC = () => {
           email: Yup.string()
             .required('E-mail is required')
             .email('Provide a valid e-mail'),
-          password: Yup.string().required('Password is required'),
+          password: Yup.string().when('oldPassword', {
+            is: (val) => !!val.length,
+            then: Yup.string().required('Field is required'),
+            otherwise: Yup.string(),
+          }),
+          passwordConfirmation: Yup.string()
+            .when('oldPassword', {
+              is: (val) => !!val.length,
+              then: Yup.string().required('Field is required'),
+              otherwise: Yup.string(),
+            })
+            .oneOf([Yup.ref('password'), null], 'Passwords must match'),
         });
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        await api.post('/users', data);
+        const {
+          name,
+          email,
+          password,
+          oldPassword,
+          passwordConfirmation,
+        } = data;
+        const formData = {
+          name,
+          email,
+          ...(oldPassword
+            ? {
+                password,
+                oldPassword,
+                passwordConfirmation,
+              }
+            : {}),
+        };
+
+        const response = await api.put('/profile', formData);
+        updateUser(response.data);
+        history.push('/dashboard');
         addToast({
           type: 'success',
-          title: 'Your account has been created',
-          description: 'You can do your login using the GoBarber',
+          title: 'Profile updated',
+          description: 'Your profile has been updated successfully',
         });
-        history.push('/');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           formRef.current?.setErrors(getValidationErrors(err));
         } else {
           addToast({
             type: 'error',
-            title: 'Error while registration your account',
-            description: 'An error occurred while registering your account',
+            title: 'Error while updating your profile',
+            description:
+              'An error occurred while update your profile. Please, try again.',
           });
         }
       }
